@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  width: 420px;
+  min-height: 300px;
+  max-height: 580px;
+  overflow-y: auto;
+}
