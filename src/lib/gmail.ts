@@ -16,13 +16,18 @@ export async function getAuthToken(): Promise<string> {
   } catch {
     // No cached token — fall through to interactive.
   }
-  const { token } = await chrome.identity.getAuthToken({ interactive: true });
-  if (!token) {
+  try {
+    const { token } = await chrome.identity.getAuthToken({ interactive: true });
+    if (token) return token;
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
     throw new Error(
-      "Google sign-in failed. Check that GOOGLE_CLIENT_ID in .env.local matches a 'Chrome Extension' OAuth client for this extension ID."
+      `Google sign-in failed (${detail}). Check that GOOGLE_CLIENT_ID in .env.local matches a 'Chrome Extension' OAuth client for this extension ID, and that this Chrome profile is signed in to a Google account.`
     );
   }
-  return token;
+  throw new Error(
+    "Google sign-in failed. Check that GOOGLE_CLIENT_ID in .env.local matches a 'Chrome Extension' OAuth client for this extension ID."
+  );
 }
 
 async function gmailFetch(path: string, token: string): Promise<any> {
