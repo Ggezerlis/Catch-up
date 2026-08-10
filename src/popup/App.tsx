@@ -95,6 +95,8 @@ export default function App() {
 }
 
 function ResultList({ result }: { result: CatchUpResult }) {
+  const [showLowPriority, setShowLowPriority] = useState(false);
+
   if (result.items.length === 0) {
     return (
       <div className="rounded-md bg-green-50 p-4 text-center text-green-700">
@@ -103,17 +105,46 @@ function ResultList({ result }: { result: CatchUpResult }) {
       </div>
     );
   }
+
+  const visible = result.items.filter((i) => i.priority !== "low");
+  const hidden = result.items.filter((i) => i.priority === "low");
+
   return (
     <div>
+      {result.digest && (
+        <div className="mb-3 rounded-md border border-blue-100 bg-blue-50 p-3 text-blue-900">
+          {result.digest}
+        </div>
+      )}
       <p className="mb-2 text-xs text-gray-400">
         {result.items.length} thread{result.items.length === 1 ? "" : "s"} ·{" "}
         {new Date(result.generatedAt).toLocaleTimeString()}
       </p>
       <ul className="space-y-2">
-        {result.items.map((item) => (
+        {visible.map((item) => (
           <ThreadCard key={item.thread_id} item={item} />
         ))}
       </ul>
+
+      {hidden.length > 0 && (
+        <div className="mt-2">
+          <button
+            onClick={() => setShowLowPriority(!showLowPriority)}
+            className="text-xs font-medium text-blue-600 hover:underline"
+          >
+            {showLowPriority
+              ? "Hide low-priority threads"
+              : `Show ${hidden.length} more (low priority)`}
+          </button>
+          {showLowPriority && (
+            <ul className="mt-2 space-y-2">
+              {hidden.map((item) => (
+                <ThreadCard key={item.thread_id} item={item} />
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -140,25 +171,33 @@ function ThreadCard({ item }: { item: CatchUpItem }) {
       </div>
       <p className="mb-1 truncate text-xs text-gray-400">{item.from}</p>
       <p className="text-gray-700">{item.summary}</p>
-      {item.draft_reply && (
-        <div className="mt-2">
+      <div className="mt-2 flex flex-wrap items-center gap-3">
+        <a
+          href={`https://mail.google.com/mail/u/0/#all/${item.thread_id}`}
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs font-medium text-blue-600 hover:underline"
+        >
+          Open in Gmail ↗
+        </a>
+        {item.draft_reply && (
           <button
             onClick={() => setExpanded(!expanded)}
             className="text-xs font-medium text-blue-600 hover:underline"
           >
             {expanded ? "Hide draft reply" : "Show draft reply"}
           </button>
-          {expanded && (
-            <div className="mt-1 rounded bg-gray-50 p-2">
-              <p className="whitespace-pre-wrap text-xs text-gray-700">{item.draft_reply}</p>
-              <button
-                onClick={copyDraft}
-                className="mt-1.5 text-xs font-medium text-blue-600 hover:underline"
-              >
-                {copied ? "Copied!" : "Copy to clipboard"}
-              </button>
-            </div>
-          )}
+        )}
+      </div>
+      {expanded && item.draft_reply && (
+        <div className="mt-1 rounded bg-gray-50 p-2">
+          <p className="whitespace-pre-wrap text-xs text-gray-700">{item.draft_reply}</p>
+          <button
+            onClick={copyDraft}
+            className="mt-1.5 text-xs font-medium text-blue-600 hover:underline"
+          >
+            {copied ? "Copied!" : "Copy to clipboard"}
+          </button>
         </div>
       )}
     </li>

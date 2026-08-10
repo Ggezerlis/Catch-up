@@ -15,14 +15,16 @@ async function runCatchUp(
   const threads = await fetchUnreadThreads(token, request.windowDays);
 
   let items: CatchUpItem[] = [];
+  let digest = "";
   if (threads.length > 0) {
     post({
       type: "status",
       message: `Summarizing ${threads.length} thread${threads.length === 1 ? "" : "s"} with Claude…`,
     });
-    const analyses = await analyzeThreads(threads);
+    const analysis = await analyzeThreads(threads);
+    digest = analysis.digest;
     const byId = new Map(threads.map((t) => [t.id, t]));
-    items = analyses
+    items = analysis.threads
       .filter((a) => byId.has(a.thread_id))
       .map((a) => {
         const meta = byId.get(a.thread_id)!;
@@ -34,6 +36,7 @@ async function runCatchUp(
   const result: CatchUpResult = {
     generatedAt: Date.now(),
     windowDays: request.windowDays,
+    digest,
     items,
   };
 

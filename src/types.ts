@@ -31,6 +31,8 @@ export interface CatchUpItem extends ThreadAnalysis {
 export interface CatchUpResult {
   generatedAt: number;
   windowDays: WindowDays;
+  /** One-paragraph "here's what happened" overview. Empty when items is empty. */
+  digest: string;
   items: CatchUpItem[];
 }
 

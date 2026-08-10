@@ -9,7 +9,12 @@ const MODEL = "claude-sonnet-5";
  * Web Store this MUST be replaced by a POST to a backend proxy (Cloudflare
  * Worker) so the API key never ships inside the extension bundle.
  */
-export async function analyzeThreads(threads: ThreadMeta[]): Promise<ThreadAnalysis[]> {
+export interface AnalyzeResult {
+  digest: string;
+  threads: ThreadAnalysis[];
+}
+
+export async function analyzeThreads(threads: ThreadMeta[]): Promise<AnalyzeResult> {
   const apiKey = import.meta.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     throw new Error("ANTHROPIC_API_KEY is not set. Add it to .env.local and rebuild.");
@@ -59,6 +64,5 @@ export async function analyzeThreads(threads: ThreadMeta[]): Promise<ThreadAnaly
   const text = data.content?.find((b: { type: string }) => b.type === "text")?.text;
   if (!text) throw new Error("Claude returned an empty response.");
 
-  const parsed = JSON.parse(text) as { threads: ThreadAnalysis[] };
-  return parsed.threads;
+  return JSON.parse(text) as AnalyzeResult;
 }
