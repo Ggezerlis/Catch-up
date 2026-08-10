@@ -96,13 +96,13 @@ failure path when no Google account is signed in.
 
 ## Monetization (next phase, not yet built)
 
-Planned: freemium — 1 free catch-up, then pay-per-use (~$0.50 per catch-up)
-or $3.99/month unlimited, via Stripe. This needs: real per-user identity
-(likely the Google account already used for OAuth), a database for
-usage/subscription state in the worker, and Stripe Checkout + webhooks to
-flip a user to "paid." The current `x-proxy-secret` header is *not* that —
-it's a single shared string that stops randoms from finding the URL and
-burning your API budget, not per-user billing.
+Planned pricing: ~$0.50 per pay-as-you-go catch-up, or $3.99/month
+unlimited, via Stripe. (Free-tier count still TBD.) This needs: real
+per-user identity (likely the Google account already used for OAuth), a
+database for usage/subscription state in the worker, and Stripe Checkout +
+webhooks to flip a user to "paid." The current `x-proxy-secret` header is
+*not* that — it's a single shared string that stops randoms from finding
+the URL and burning your API budget, not per-user billing.
 
 ## Out of scope for MVP
 
