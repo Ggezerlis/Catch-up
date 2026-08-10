@@ -1,0 +1,9 @@
+name = "catchup-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-11-06"
+
+# Secrets (never put these here — set via `npm run secret:anthropic` /
+# `npm run secret:proxy`, which store them encrypted on Cloudflare):
+#   ANTHROPIC_API_KEY    — from console.anthropic.com
+#   PROXY_SHARED_SECRET  — any string you make up; must match CATCHUP_PROXY_SECRET
+#                           in the extension's .env.local

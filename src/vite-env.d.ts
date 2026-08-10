@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly ANTHROPIC_API_KEY: string;
+  readonly CATCHUP_PROXY_URL: string;
+  readonly CATCHUP_PROXY_SECRET: string;
 }
 
 interface ImportMeta {

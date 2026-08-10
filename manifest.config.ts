@@ -5,6 +5,16 @@ import { loadEnv } from "vite";
 // committed, so the manifest is generated here from .env.local at build time.
 export default defineManifest((env) => {
   const vars = loadEnv(env.mode, process.cwd(), "");
+  // Grants the service worker cross-origin fetch to the proxy without CORS
+  // headers being required on its responses. Falls back to a placeholder
+  // until CATCHUP_PROXY_URL is set in .env.local.
+  const proxyOrigin = (() => {
+    try {
+      return new URL(vars.CATCHUP_PROXY_URL ?? "").origin;
+    } catch {
+      return "https://your-worker-subdomain.workers.dev";
+    }
+  })();
   return {
     manifest_version: 3,
     name: "Catch Up",
@@ -21,7 +31,7 @@ export default defineManifest((env) => {
     permissions: ["identity", "storage"],
     host_permissions: [
       "https://gmail.googleapis.com/*",
-      "https://api.anthropic.com/*",
+      `${proxyOrigin}/*`,
     ],
     oauth2: {
       client_id:

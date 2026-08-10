@@ -1,0 +1,5 @@
+# For local testing with `npm run dev` (wrangler dev).
+# Copy to .dev.vars (gitignored) and fill in — NOT used for the real
+# deployed worker, which reads secrets set via `wrangler secret put`.
+ANTHROPIC_API_KEY=
+PROXY_SHARED_SECRET=

@@ -5,8 +5,8 @@ import manifest from "./manifest.config";
 
 export default defineConfig({
   plugins: [react(), crx({ manifest })],
-  // Expose ANTHROPIC_API_KEY from .env.local to the bundle.
-  // Local dev only — before Chrome Web Store, the Claude call must move
-  // behind a backend proxy (see README).
-  envPrefix: ["VITE_", "ANTHROPIC_"],
+  // Expose CATCHUP_* vars (the backend proxy URL/secret) from .env.local to
+  // the bundle. The Anthropic key itself never enters this bundle — it lives
+  // only in the worker's Cloudflare secrets (see worker/README or root README).
+  envPrefix: ["VITE_", "CATCHUP_"],
 });
