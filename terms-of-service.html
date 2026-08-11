@@ -1,0 +1,404 @@
+<title>Catch Up — Terms of Service</title>
+<style>
+  :root {
+    --bg: #fbfcfe;
+    --surface: #eef2f9;
+    --surface-2: #ffffff;
+    --border: #dbe3ef;
+    --text: #0f1b2d;
+    --text-muted: #5b6b84;
+    --accent: #2563eb;
+    --accent-strong: #1d4ed8;
+    --accent-tint: #e3ecff;
+    --success: #16a34a;
+    --success-tint: #e6f6ec;
+    --warn: #b45309;
+    --warn-tint: #fdf1e0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0a0f1a;
+      --surface: #121a2b;
+      --surface-2: #0e1524;
+      --border: #22304a;
+      --text: #e7ecf6;
+      --text-muted: #94a3bf;
+      --accent: #5b9bff;
+      --accent-strong: #7fb0ff;
+      --accent-tint: #16233d;
+      --success: #34d576;
+      --success-tint: #10281c;
+      --warn: #f5a742;
+      --warn-tint: #2c2110;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a0f1a;
+    --surface: #121a2b;
+    --surface-2: #0e1524;
+    --border: #22304a;
+    --text: #e7ecf6;
+    --text-muted: #94a3bf;
+    --accent: #5b9bff;
+    --accent-strong: #7fb0ff;
+    --accent-tint: #16233d;
+    --success: #34d576;
+    --success-tint: #10281c;
+    --warn: #f5a742;
+    --warn-tint: #2c2110;
+  }
+
+  * { box-sizing: border-box; }
+  html { text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 600;
+    text-wrap: balance;
+    color: var(--text);
+  }
+
+  .mono {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  }
+
+  .shell {
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0 1.5rem 6rem;
+  }
+
+  header.top {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  header.top .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0 0 0.75rem;
+  }
+  header.top h1 {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    margin: 0 0 0.6rem;
+    line-height: 1.15;
+  }
+  header.top .sub {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 42rem;
+    margin: 0 0 1.25rem;
+  }
+  header.top .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  header.top .meta strong { color: var(--text); font-weight: 600; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 42rem);
+    gap: 3.5rem;
+    align-items: start;
+    justify-content: center;
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.toc { position: static; order: 2; }
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 2rem;
+  }
+  nav.toc .label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.85rem;
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    border-left: 1px solid var(--border);
+  }
+  nav.toc li { padding-left: 0.9rem; }
+  nav.toc a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    display: flex;
+    gap: 0.55rem;
+  }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc .num { font-variant-numeric: tabular-nums; color: var(--text-muted); opacity: 0.6; }
+
+  main { min-width: 0; }
+
+  .facts {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    margin: 0 0 3rem;
+  }
+  .facts h2 {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: inherit;
+    margin: 0 0 1rem;
+    color: var(--text-muted);
+  }
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.1rem 1.75rem;
+  }
+  .fact { display: flex; gap: 0.7rem; align-items: flex-start; }
+  .fact .dot {
+    width: 0.5rem; height: 0.5rem; border-radius: 999px;
+    background: var(--accent); margin-top: 0.5rem; flex: none;
+  }
+  .fact p { margin: 0; font-size: 0.9rem; color: var(--text); }
+
+  section { margin: 0 0 2.75rem; scroll-margin-top: 2rem; }
+  section h2 {
+    font-size: 1.35rem;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  section h2 .num {
+    font-family: inherit;
+    font: 0.85rem/1 ui-monospace, monospace;
+    color: var(--text-muted);
+  }
+  section p { margin: 0 0 1rem; color: var(--text); }
+  section ul { margin: 0 0 1rem; padding-left: 1.3rem; }
+  section li { margin: 0 0 0.5rem; }
+  section .muted { color: var(--text-muted); }
+
+  .callout {
+    border: 1px solid var(--warn);
+    background: var(--warn-tint);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    margin: 0 0 1.25rem;
+    display: flex;
+    gap: 0.8rem;
+  }
+  .callout .mark { color: var(--warn); font-weight: 700; flex: none; }
+  .callout p { margin: 0; color: var(--text); font-size: 0.92rem; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin: 0 0 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table.data-table th, table.data-table td {
+    text-align: left;
+    padding: 0.65rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.data-table th {
+    background: var(--surface);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  table.data-table tr:last-child td { border-bottom: none; }
+  .tablewrap { overflow-x: auto; }
+
+  footer.contact {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    margin-top: 1rem;
+  }
+  footer.contact p { color: var(--text-muted); font-size: 0.9rem; }
+  footer.contact a { font-weight: 600; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+</style>
+
+<div class="shell">
+  <header class="top">
+    <p class="eyebrow">Terms of Service</p>
+    <h1>Catch Up</h1>
+    <p class="sub">The terms for using the Catch Up Chrome extension and its backend. By installing
+      or using Catch Up, you agree to these terms.</p>
+    <div class="meta">
+      <span>Effective <strong class="mono">11 August 2026</strong></span>
+      <span>Operated by <strong>George Gezerlis</strong>, Greece</span>
+      <span>Contact <strong><a href="mailto:george@gezerlis.gr">george@gezerlis.gr</a></strong></span>
+      <span>See also <strong><a href="./privacy-policy.html">Privacy Policy</a></strong></span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="Sections">
+      <p class="label">On this page</p>
+      <ol>
+        <li><a href="#service"><span class="num mono">01</span>The service</a></li>
+        <li><a href="#accounts"><span class="num mono">02</span>Accounts</a></li>
+        <li><a href="#payments"><span class="num mono">03</span>Subscriptions & payments</a></li>
+        <li><a href="#refunds"><span class="num mono">04</span>Refunds & cancellation</a></li>
+        <li><a href="#acceptable-use"><span class="num mono">05</span>Acceptable use</a></li>
+        <li><a href="#warranties"><span class="num mono">06</span>No warranty</a></li>
+        <li><a href="#liability"><span class="num mono">07</span>Liability</a></li>
+        <li><a href="#termination"><span class="num mono">08</span>Termination</a></li>
+        <li><a href="#law"><span class="num mono">09</span>Governing law</a></li>
+        <li><a href="#changes"><span class="num mono">10</span>Changes</a></li>
+        <li><a href="#contact"><span class="num mono">11</span>Contact</a></li>
+      </ol>
+    </nav>
+
+    <main>
+      <div class="facts">
+        <h2>In short</h2>
+        <div class="facts-grid">
+          <div class="fact"><span class="dot"></span><p>3 free catch-ups a month, then €0.50 per catch-up or €3.99/month for unlimited.</p></div>
+          <div class="fact"><span class="dot"></span><p>Summaries and draft replies are AI-generated and can be wrong — always check the original email before relying on one, especially for anything important.</p></div>
+          <div class="fact"><span class="dot"></span><p>Drafts are copy-paste only. Catch Up never sends anything on your behalf.</p></div>
+          <div class="fact"><span class="dot"></span><p>Cancel anytime from the in-app "manage / cancel" link — no phone call, no dark patterns.</p></div>
+          <div class="fact"><span class="dot"></span><p>Provided best-effort, with no uptime guarantee — it's a small, independently-run tool.</p></div>
+        </div>
+      </div>
+
+      <section id="service">
+        <h2><span class="num mono">01</span>The service</h2>
+        <p>Catch Up reads your unread Gmail threads for a time window you choose, and uses Anthropic's
+          Claude to generate a priority ranking, short summaries, and — for higher-priority threads —
+          draft replies you can copy into Gmail yourself.</p>
+        <div class="callout">
+          <span class="mark">!</span>
+          <p><strong>AI output can be wrong.</strong> Priority ranking, summaries, and drafts are
+            generated automatically and may misread tone, miss context, or misjudge importance.
+            Catch Up is a triage aid, not a replacement for reading anything you actually need to
+            act on. We're not responsible for decisions made solely on the basis of a summary or
+            priority label.</p>
+        </div>
+      </section>
+
+      <section id="accounts">
+        <h2><span class="num mono">02</span>Accounts</h2>
+        <p>There's no separate Catch Up account — you sign in with Google, and your Gmail address is
+          how we identify your usage and billing. You're responsible for keeping your Google account
+          secure; anyone signed into it can use your Catch Up entitlements.</p>
+      </section>
+
+      <section id="payments">
+        <h2><span class="num mono">03</span>Subscriptions & payments</h2>
+        <p>Payments are processed by Stripe. A single catch-up is a one-time charge; the unlimited
+          plan is a recurring monthly subscription that renews automatically until cancelled. Prices
+          are shown in EUR and converted to your local currency at checkout where applicable. We may
+          change prices going forward; changes won't apply to a billing period you've already paid
+          for.</p>
+      </section>
+
+      <section id="refunds">
+        <h2><span class="num mono">04</span>Refunds & cancellation</h2>
+        <p>Cancel your subscription anytime from the "manage / cancel" link in the popup (Stripe's
+          billing portal) — it takes effect at the end of the period you've already paid for, and
+          you keep access until then. No cancellation fee, no retention calls.</p>
+        <p>Given how small these charges are, if something's genuinely wrong — a duplicate charge, a
+          purchase that never unlocked anything — email
+          <a href="mailto:george@gezerlis.gr">george@gezerlis.gr</a> and we'll sort out a refund
+          rather than debate it. This doesn't limit any statutory refund rights you have under the
+          consumer protection law of your own country.</p>
+      </section>
+
+      <section id="acceptable-use">
+        <h2><span class="num mono">05</span>Acceptable use</h2>
+        <p>Don't use Catch Up to:</p>
+        <ul>
+          <li>Automate or script requests to get around the free-tier limits or paid pricing</li>
+          <li>Access or attempt to access another person's Gmail data through the service</li>
+          <li>Send content generated by Catch Up that violates the law or another person's rights</li>
+          <li>Probe, disrupt, or overload the backend beyond normal personal use</li>
+        </ul>
+        <p>We may suspend access for accounts that do any of the above.</p>
+      </section>
+
+      <section id="warranties">
+        <h2><span class="num mono">06</span>No warranty</h2>
+        <p>Catch Up is provided <span class="mono">"as is"</span> and <span class="mono">"as available,"</span>
+          without warranties of any kind, express or implied — including accuracy, fitness for a
+          particular purpose, or uninterrupted availability. It's built and run by one person as an
+          independent tool, not a funded, on-call service.</p>
+      </section>
+
+      <section id="liability">
+        <h2><span class="num mono">07</span>Liability</h2>
+        <p>To the maximum extent permitted by law, our total liability for any claim arising from
+          your use of Catch Up is limited to the amount you paid us in the 3 months before the
+          claim arose. We're not liable for indirect, incidental, or consequential damages,
+          including missed emails, missed deadlines, or decisions made based on an AI-generated
+          summary or priority label. Nothing here limits liability where the law doesn't allow it to
+          be limited (for example, liability for fraud).</p>
+      </section>
+
+      <section id="termination">
+        <h2><span class="num mono">08</span>Termination</h2>
+        <p>You can stop using Catch Up anytime by uninstalling the extension and cancelling any
+          active subscription. We may suspend or end access for violations of the acceptable-use
+          section above, or discontinue the service entirely — if we do the latter, active
+          subscribers get a pro-rated refund for the unused portion of their current period.</p>
+      </section>
+
+      <section id="law">
+        <h2><span class="num mono">09</span>Governing law</h2>
+        <p>These terms are governed by the laws of Greece. If you're a consumer based elsewhere in
+          the EU/EEA, the mandatory consumer-protection laws of your own country of residence still
+          apply and take precedence over anything here that conflicts with them.</p>
+      </section>
+
+      <section id="changes">
+        <h2><span class="num mono">10</span>Changes to these terms</h2>
+        <p>If these terms change materially, we'll update the effective date above and note it in
+          the extension's release notes. Continuing to use Catch Up after an update means you accept
+          the revised terms.</p>
+      </section>
+
+      <footer class="contact" id="contact">
+        <h2 style="font-family: 'Iowan Old Style', Palatino, Georgia, serif; font-size:1.35rem; margin:0 0 0.75rem;"><span class="num mono">11</span> Contact</h2>
+        <p>Questions about these terms, billing, or anything else:
+          <a href="mailto:george@gezerlis.gr">george@gezerlis.gr</a></p>
+      </footer>
+    </main>
+  </div>
+</div>
