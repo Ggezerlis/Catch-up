@@ -9,7 +9,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "catchup-db"
-database_id = "PASTE_DATABASE_ID_HERE"
+database_id = "711540a5-7a5b-40ae-9dac-241c4914999e"
 
 [vars]
 # Stripe Price IDs (price_...), created in the Stripe dashboard.
