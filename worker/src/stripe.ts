@@ -4,6 +4,7 @@ import {
   addCredits,
   claimEvent,
   emailForStripeCustomer,
+  getStripeCustomerId,
   setStripeCustomer,
   setSubscription,
 } from "./db";
@@ -47,6 +48,26 @@ export async function createCheckoutUrl(
   });
 
   if (!session.url) throw new Error("Stripe did not return a Checkout URL.");
+  return session.url;
+}
+
+/**
+ * Creates a Stripe Billing Portal session so the user can cancel their
+ * subscription, update their payment method, or view invoices themselves —
+ * self-serve, rather than us building custom cancel/update flows.
+ */
+export async function createPortalUrl(env: Env, email: string): Promise<string> {
+  const customerId = await getStripeCustomerId(env.DB, email);
+  if (!customerId) {
+    throw new Error("No billing account found yet — subscribe or make a purchase first.");
+  }
+
+  const stripe = stripeClient(env);
+  const base = env.PUBLIC_BASE_URL.replace(/\/$/, "");
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${base}/checkout/done?status=success`,
+  });
   return session.url;
 }
 

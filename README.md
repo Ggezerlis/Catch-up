@@ -51,14 +51,25 @@ under Products, and copy each `price_...` id into `[vars]` in `wrangler.toml`:
 
 | Product | Type | Price | Goes in |
 |---|---|---|---|
-| Single catch-up | One-time | $0.50 | `STRIPE_PRICE_SINGLE` |
-| Catch Up unlimited | Recurring, monthly | $3.99 | `STRIPE_PRICE_SUB` |
+| Single catch-up | One-time | €0.50 | `STRIPE_PRICE_SINGLE` |
+| Catch Up unlimited | Recurring, monthly | €3.99 | `STRIPE_PRICE_SUB` |
+
+Set currency to EUR (not USD) — Stripe enforces a minimum charge amount that
+$0.50 fails to clear once converted to a EUR-settling account's currency.
+Turn on **Adaptive Pricing** (dashboard search → "Adaptive Pricing") so
+Stripe still shows/charges customers in their own local currency.
 
 **Stripe keys:**
 
 ```bash
 npm run secret:stripe          # Stripe dashboard -> Developers -> API keys -> TEST secret key (sk_test_...)
 ```
+
+**Customer portal** — lets subscribed users cancel, update their card, or see
+invoices themselves ("manage / cancel" link in the popup). Activate it once:
+Stripe dashboard → search **"Customer portal"** (or Settings → Billing →
+Customer portal) → **Activate test link**. No extra config needed — the
+worker creates portal sessions on demand.
 
 **Webhook** — Stripe dashboard → Developers → Webhooks → Add endpoint:
 
@@ -146,7 +157,9 @@ Stripe account or real payment needed.
 
 Pricing:
 - 3 free catch-ups per calendar month (UTC)
-- After that: $0.50 for a single catch-up, or $3.99/month for unlimited
+- After that: €0.50 for a single catch-up, or €3.99/month for unlimited
+  (Stripe prices are set in EUR and use Adaptive Pricing to convert to each
+  customer's local currency automatically)
 
 How it hangs together:
 
@@ -167,6 +180,9 @@ How it hangs together:
   Stripe's retries can't double-credit a single payment.
 - **Subscription expiry** is enforced against the stored period end, so a
   missed cancellation webhook lapses access instead of granting it forever.
+- **Self-serve cancellation.** Subscribed users get a "manage / cancel" link
+  (Stripe's hosted Customer Portal) instead of a custom cancel flow — same
+  webhook path (`customer.subscription.deleted`/`.updated`) revokes access.
 
 The `x-proxy-secret` header predates this and is now just defence-in-depth
 against strangers hitting the URL; per-user billing is what the above does.

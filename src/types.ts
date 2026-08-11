@@ -66,7 +66,8 @@ export type CatchUpEvent =
 /** One-shot messages (chrome.runtime.sendMessage), outside the catch-up port. */
 export type AppMessage =
   | { type: "getStatus" }
-  | { type: "startCheckout"; kind: PurchaseKind };
+  | { type: "startCheckout"; kind: PurchaseKind }
+  | { type: "openPortal" };
 
 export type AppResponse =
   | { ok: true; status: UserStatus }

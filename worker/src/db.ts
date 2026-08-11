@@ -204,6 +204,17 @@ export async function setStripeCustomer(
     .run();
 }
 
+export async function getStripeCustomerId(
+  db: D1Database,
+  email: string
+): Promise<string | null> {
+  const row = await db
+    .prepare(`SELECT stripe_customer_id FROM users WHERE email = ?`)
+    .bind(email)
+    .first<{ stripe_customer_id: string | null }>();
+  return row?.stripe_customer_id ?? null;
+}
+
 export async function emailForStripeCustomer(
   db: D1Database,
   customerId: string

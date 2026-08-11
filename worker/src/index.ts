@@ -3,7 +3,7 @@ import type { ThreadMeta } from "../../src/types";
 import type { Env } from "./env";
 import { AuthError, resolveUserEmail } from "./identity";
 import { consume, getStatus, refund, type Entitlement } from "./db";
-import { createCheckoutUrl, handleWebhook, type PurchaseKind } from "./stripe";
+import { createCheckoutUrl, createPortalUrl, handleWebhook, type PurchaseKind } from "./stripe";
 
 const MODEL = "claude-sonnet-5";
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
@@ -125,6 +125,15 @@ async function handleCheckout(request: Request, env: Env): Promise<Response> {
   }
 }
 
+async function handlePortal(request: Request, env: Env): Promise<Response> {
+  const email = await authenticate(request, env);
+  try {
+    return json({ url: await createPortalUrl(env, email) });
+  } catch (err) {
+    return json({ error: err instanceof Error ? err.message : String(err) }, 400);
+  }
+}
+
 /** Landing page Stripe returns the user to after checkout. */
 function checkoutDonePage(url: URL): Response {
   const ok = url.searchParams.get("status") === "success";
@@ -173,6 +182,7 @@ export default {
         if (url.pathname === "/catchup") return await handleCatchUp(request, env);
         if (url.pathname === "/status") return await handleStatus(request, env);
         if (url.pathname === "/checkout") return await handleCheckout(request, env);
+        if (url.pathname === "/portal") return await handlePortal(request, env);
       }
     } catch (err) {
       if (err instanceof AuthError) return json({ error: err.message }, 401);

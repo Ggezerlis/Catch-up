@@ -89,3 +89,8 @@ export async function createCheckoutUrl(
   const { url } = await post<{ url: string }>("/checkout", googleToken, { kind });
   return url;
 }
+
+export async function createPortalUrl(googleToken: string): Promise<string> {
+  const { url } = await post<{ url: string }>("/portal", googleToken, {});
+  return url;
+}

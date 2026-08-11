@@ -10,6 +10,7 @@ import { getAuthToken, fetchUnreadThreads } from "../lib/gmail";
 import {
   analyzeThreads,
   createCheckoutUrl,
+  createPortalUrl,
   fetchStatus,
   PaymentRequiredError,
 } from "../lib/api";
@@ -91,6 +92,11 @@ chrome.runtime.onMessage.addListener(
         } else if (message.type === "startCheckout") {
           // Stripe Checkout can't run inside the popup, so open it in a tab.
           const url = await createCheckoutUrl(token, message.kind);
+          await chrome.tabs.create({ url });
+          sendResponse({ ok: true });
+        } else if (message.type === "openPortal") {
+          // Same story for the Billing Portal (cancel, update card, invoices).
+          const url = await createPortalUrl(token);
           await chrome.tabs.create({ url });
           sendResponse({ ok: true });
         }

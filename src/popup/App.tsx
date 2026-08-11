@@ -131,7 +131,12 @@ export default function App() {
 
 function AllowanceLine({ account }: { account: UserStatus }) {
   if (account.subscribed) {
-    return <p className="mt-1.5 text-center text-xs text-gray-400">Unlimited · subscribed</p>;
+    return (
+      <p className="mt-1.5 text-center text-xs text-gray-400">
+        Unlimited · subscribed ·{" "}
+        <ManageSubscriptionLink />
+      </p>
+    );
   }
   const parts: string[] = [];
   if (account.freeRemaining > 0) parts.push(`${account.freeRemaining} free left this month`);
@@ -142,6 +147,27 @@ function AllowanceLine({ account }: { account: UserStatus }) {
     <p className="mt-1.5 text-center text-xs text-gray-400">
       {parts.join(" · ") || "No catch-ups left"}
     </p>
+  );
+}
+
+function ManageSubscriptionLink() {
+  const [busy, setBusy] = useState(false);
+
+  const openPortal = () => {
+    setBusy(true);
+    chrome.runtime.sendMessage({ type: "openPortal" }, (res: AppResponse) => {
+      setBusy(false);
+      if (!res?.ok) {
+        // Rare (e.g. Stripe misconfigured); no dedicated UI for this edge case.
+        alert(res?.error ?? "Could not open the billing portal.");
+      }
+    });
+  };
+
+  return (
+    <button onClick={openPortal} disabled={busy} className="underline hover:text-gray-600">
+      {busy ? "Opening…" : "manage / cancel"}
+    </button>
   );
 }
 
