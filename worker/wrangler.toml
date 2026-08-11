@@ -14,8 +14,8 @@ database_id = "711540a5-7a5b-40ae-9dac-241c4914999e"
 [vars]
 # Stripe Price IDs (price_...), created in the Stripe dashboard.
 # Not secrets — price ids are safe to commit.
-STRIPE_PRICE_SINGLE = "price_1U3BbrGRcQOjNUYge9ba7fEa"
-STRIPE_PRICE_SUB = "price_1U3BclGRcQOjNUYgK2lWZeJA"
+STRIPE_PRICE_SINGLE = "price_1U3CA7GRcQOjNUYgJ5EvqeFB"
+STRIPE_PRICE_SUB = "price_1U3C8qGRcQOjNUYgoPph8ZUV"
 # This worker's own origin, used to build Stripe's return URLs.
 PUBLIC_BASE_URL = "https://catchup-proxy.george-7e2.workers.dev"
 
