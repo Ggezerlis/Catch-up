@@ -10,6 +10,9 @@ import type {
   WindowDays,
 } from "../types";
 
+const PRIVACY_URL = "https://ggezerlis.github.io/catch-up/privacy-policy.html";
+const TERMS_URL = "https://ggezerlis.github.io/catch-up/terms-of-service.html";
+
 const WINDOWS: Array<{ days: WindowDays; label: string }> = [
   { days: 1, label: "24h" },
   { days: 3, label: "3 days" },
@@ -125,6 +128,16 @@ export default function App() {
       {!loading && result && (
         <ResultList result={result} />
       )}
+
+      <footer className="mt-4 flex justify-center gap-3 border-t border-gray-100 pt-3 text-[11px] text-gray-400">
+        <a href={PRIVACY_URL} target="_blank" rel="noreferrer" className="hover:underline">
+          Privacy
+        </a>
+        <span aria-hidden="true">·</span>
+        <a href={TERMS_URL} target="_blank" rel="noreferrer" className="hover:underline">
+          Terms
+        </a>
+      </footer>
     </div>
   );
 }
