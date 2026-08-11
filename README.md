@@ -31,6 +31,49 @@ npm run deploy
 
 The deploy command prints a URL like `https://catchup-proxy.<your-subdomain>.workers.dev`.
 Save it — you'll need `https://catchup-proxy.<your-subdomain>.workers.dev/catchup` next.
+Put that same base URL in `PUBLIC_BASE_URL` in `wrangler.toml`.
+
+### 1b. Set up billing (database + Stripe)
+
+**Use Stripe TEST mode throughout** — the toggle in the Stripe dashboard.
+Test mode has its own keys, its own products, and its own webhooks, so none
+of this touches live payments until you deliberately switch.
+
+**Database** (stores free-uses-this-month, credits, subscription state):
+
+```bash
+npm run db:create      # prints a database_id — paste it into wrangler.toml
+npm run db:migrate     # creates the tables
+```
+
+**Stripe products** — in the Stripe dashboard (test mode), create two prices
+under Products, and copy each `price_...` id into `[vars]` in `wrangler.toml`:
+
+| Product | Type | Price | Goes in |
+|---|---|---|---|
+| Single catch-up | One-time | $0.50 | `STRIPE_PRICE_SINGLE` |
+| Catch Up unlimited | Recurring, monthly | $3.99 | `STRIPE_PRICE_SUB` |
+
+**Stripe keys:**
+
+```bash
+npm run secret:stripe          # Stripe dashboard -> Developers -> API keys -> TEST secret key (sk_test_...)
+```
+
+**Webhook** — Stripe dashboard → Developers → Webhooks → Add endpoint:
+
+- URL: `https://catchup-proxy.<your-subdomain>.workers.dev/stripe/webhook`
+- Events: `checkout.session.completed`, `customer.subscription.updated`,
+  `customer.subscription.deleted`
+
+It shows a signing secret (`whsec_...`) once — copy it, then:
+
+```bash
+npm run secret:stripe-webhook
+npm run deploy                 # redeploy so the new vars/secrets take effect
+```
+
+Test card for test mode: `4242 4242 4242 4242`, any future expiry, any CVC.
 
 ### 2. Set up the extension
 
@@ -94,21 +137,46 @@ Chromium via Playwright and drives the popup — no Google/Anthropic
 credentials needed, since it only exercises rendering and the expected
 failure path when no Google account is signed in.
 
-## Monetization (next phase, not yet built)
+`npm run test:paywall` stubs the backend's billing responses to render the
+three account states (allowance remaining, exhausted/paywalled, subscribed)
+and checks each purchase button dispatches the right checkout kind — no
+Stripe account or real payment needed.
 
-Planned pricing:
-- 3 free catch-ups/month
-- After that: $0.50 for a single one-off catch-up, or $3.99/month for unlimited
+## Monetization
 
-Via Stripe. This needs: real per-user identity (likely the Google account
-already used for OAuth), a database for usage/subscription state in the
-worker (to count the 3 free/month and know who's paid), and Stripe Checkout
-+ webhooks to record purchases. The current `x-proxy-secret` header is *not*
-that — it's a single shared string that stops randoms from finding the URL
-and burning your API budget, not per-user billing.
+Pricing:
+- 3 free catch-ups per calendar month (UTC)
+- After that: $0.50 for a single catch-up, or $3.99/month for unlimited
+
+How it hangs together:
+
+- **Identity.** The extension sends its Google OAuth token to the worker,
+  which asks Google whose token it is. It never trusts an email the client
+  claims — otherwise anyone could forge one and mint free catch-ups or spend
+  someone else's credits.
+- **Entitlement order.** Active subscription → free allowance → purchased
+  credit → HTTP 402 and the popup shows the paywall.
+- **Atomicity.** Each spend is one conditional `UPDATE` that re-checks the
+  balance in its `WHERE` clause, so two simultaneous requests can't both
+  consume the same last credit.
+- **Refunds.** If Claude fails after a spend, the entitlement is returned —
+  an outage never costs the user a paid credit.
+- **Webhooks are the only thing that grants entitlement.** The browser
+  redirect after checkout proves nothing (anyone can visit the success URL);
+  only Stripe's signed webhook moves credits. Event ids are recorded so
+  Stripe's retries can't double-credit a single payment.
+- **Subscription expiry** is enforced against the stored period end, so a
+  missed cancellation webhook lapses access instead of granting it forever.
+
+The `x-proxy-secret` header predates this and is now just defence-in-depth
+against strangers hitting the URL; per-user billing is what the above does.
 
 ## Out of scope for MVP
 
-Stripe/billing (see above — proxy is done, billing isn't), sending replies
-directly, non-Gmail providers, multi-account, calendar features, Web Store
-listing. Draft replies are copy-paste only.
+Sending replies directly, non-Gmail providers, multi-account, calendar
+features, Chrome Web Store listing. Draft replies are copy-paste only.
+
+Billing is built but still in Stripe **test mode** — going live means
+swapping in live-mode keys, prices, and a live webhook endpoint, and is
+gated on the Web Store listing anyway (nobody can pay for an extension they
+can't install).

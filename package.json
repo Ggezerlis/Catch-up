@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "test:popup": "npm run build && node test-popup.mjs"
+    "test:popup": "npm run build && node test-popup.mjs",
+    "test:paywall": "npm run build && node test-paywall.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

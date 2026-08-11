@@ -36,6 +36,20 @@ export interface CatchUpResult {
   items: CatchUpItem[];
 }
 
+/** What the next catch-up would draw on; null means payment is required. */
+export type Entitlement = "subscription" | "free" | "credit";
+
+/** The user's billing standing, as reported by the backend. */
+export interface UserStatus {
+  email: string;
+  subscribed: boolean;
+  freeRemaining: number;
+  credits: number;
+  nextDrawsOn: Entitlement | null;
+}
+
+export type PurchaseKind = "single" | "subscription";
+
 /** Messages sent from popup to the service worker over the port. */
 export interface CatchUpRequest {
   type: "catchup";
@@ -46,4 +60,15 @@ export interface CatchUpRequest {
 export type CatchUpEvent =
   | { type: "status"; message: string }
   | { type: "result"; result: CatchUpResult }
+  | { type: "paywall"; status: UserStatus }
   | { type: "error"; message: string };
+
+/** One-shot messages (chrome.runtime.sendMessage), outside the catch-up port. */
+export type AppMessage =
+  | { type: "getStatus" }
+  | { type: "startCheckout"; kind: PurchaseKind };
+
+export type AppResponse =
+  | { ok: true; status: UserStatus }
+  | { ok: true }
+  | { ok: false; error: string };

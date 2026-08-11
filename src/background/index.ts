@@ -1,6 +1,18 @@
-import type { CatchUpEvent, CatchUpItem, CatchUpRequest, CatchUpResult } from "../types";
+import type {
+  AppMessage,
+  AppResponse,
+  CatchUpEvent,
+  CatchUpItem,
+  CatchUpRequest,
+  CatchUpResult,
+} from "../types";
 import { getAuthToken, fetchUnreadThreads } from "../lib/gmail";
-import { analyzeThreads } from "../lib/claude";
+import {
+  analyzeThreads,
+  createCheckoutUrl,
+  fetchStatus,
+  PaymentRequiredError,
+} from "../lib/api";
 
 const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 } as const;
 
@@ -21,7 +33,7 @@ async function runCatchUp(
       type: "status",
       message: `Summarizing ${threads.length} thread${threads.length === 1 ? "" : "s"} with Claude…`,
     });
-    const analysis = await analyzeThreads(threads);
+    const analysis = await analyzeThreads(threads, token);
     digest = analysis.digest;
     const byId = new Map(threads.map((t) => [t.id, t]));
     items = analysis.threads
@@ -59,7 +71,36 @@ chrome.runtime.onConnect.addListener((port) => {
       }
     };
     runCatchUp(message, post).catch((err: unknown) => {
-      post({ type: "error", message: err instanceof Error ? err.message : String(err) });
+      if (err instanceof PaymentRequiredError) {
+        post({ type: "paywall", status: err.status });
+      } else {
+        post({ type: "error", message: err instanceof Error ? err.message : String(err) });
+      }
     });
   });
 });
+
+// One-shot requests from the popup (status lookup, starting checkout).
+chrome.runtime.onMessage.addListener(
+  (message: AppMessage, _sender, sendResponse: (r: AppResponse) => void) => {
+    (async () => {
+      try {
+        const token = await getAuthToken();
+        if (message.type === "getStatus") {
+          sendResponse({ ok: true, status: await fetchStatus(token) });
+        } else if (message.type === "startCheckout") {
+          // Stripe Checkout can't run inside the popup, so open it in a tab.
+          const url = await createCheckoutUrl(token, message.kind);
+          await chrome.tabs.create({ url });
+          sendResponse({ ok: true });
+        }
+      } catch (err) {
+        sendResponse({
+          ok: false,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    })();
+    return true; // keep the message channel open for the async reply
+  }
+);
