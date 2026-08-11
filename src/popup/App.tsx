@@ -10,8 +10,8 @@ import type {
   WindowDays,
 } from "../types";
 
-const PRIVACY_URL = "https://ggezerlis.github.io/catch-up/privacy-policy.html";
-const TERMS_URL = "https://ggezerlis.github.io/catch-up/terms-of-service.html";
+const PRIVACY_URL = "https://ggezerlis.github.io/Catch-up/privacy-policy.html";
+const TERMS_URL = "https://ggezerlis.github.io/Catch-up/terms-of-service.html";
 
 const WINDOWS: Array<{ days: WindowDays; label: string }> = [
   { days: 1, label: "24h" },
