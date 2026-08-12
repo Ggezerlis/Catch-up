@@ -10,7 +10,7 @@
     --accent: #2563eb;
     --accent-strong: #1d4ed8;
     --accent-tint: #e3ecff;
-    --success: #16a34a;
+    --success: #0f7233;
     --success-tint: #e6f6ec;
   }
   @media (prefers-color-scheme: dark) {
@@ -82,12 +82,12 @@
     margin-bottom: 2.5rem;
   }
   header.top .eyebrow {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     margin: 0 0 0.75rem;
   }
+  header.top .eyebrow a { color: var(--text-muted); text-decoration: none; }
+  header.top .eyebrow a:hover { color: var(--accent); }
   header.top h1 {
     font-size: clamp(1.9rem, 4vw, 2.6rem);
     margin: 0 0 0.6rem;

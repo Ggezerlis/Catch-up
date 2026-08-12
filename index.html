@@ -250,6 +250,7 @@
     gap: 3.25rem; align-items: center;
   }
   @media (max-width: 880px) { .split { grid-template-columns: 1fr; gap: 2.25rem; } }
+  .prose { max-width: 42rem; }
   .split.narrow-right { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
   @media (max-width: 880px) { .split.narrow-right { grid-template-columns: 1fr; } }
 
@@ -335,8 +336,9 @@
     <div class="brand"><img class="mark" src="data:image/png;base64,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" alt="" /> Catch&nbsp;Up</div>
     <div class="nav-links">
       <a href="#how" class="hide-sm">How it works</a>
-      <a href="#privacy" class="hide-sm">Privacy</a>
-      <a href="#pricing">Pricing</a>
+      <a href="#pricing" class="hide-sm">Pricing</a>
+      <a href="./privacy-policy.html">Privacy</a>
+      <a href="./terms-of-service.html">Terms</a>
       <a href="https://github.com/Ggezerlis/Catch-up">GitHub</a>
     </div>
   </nav>
@@ -466,39 +468,17 @@
         <div>
           <h3>Reply to what matters</h3>
           <p>High-priority threads arrive with a draft reply ready to copy into Gmail. Everything
-            low-priority stays folded away until you ask for it.</p>
+            low-priority stays folded away until you ask for it. The popup keeps your last catch-up, so
+            closing it doesn't lose the result.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section>
-  <div class="shell split narrow-right">
-    <div>
-      <h2 class="head serif">Small enough to check between things</h2>
-      <p class="head-note">The whole product is one popup in your toolbar: window picker, one
-        button, and the result. It remembers your last catch-up, so closing the popup doesn't
-        lose it.</p>
-      <div class="contrast">
-        <div class="cline yes"><span class="icon">✓</span><p><b>A digest first.</b> One paragraph
-          telling you what happened while you were gone.</p></div>
-        <div class="cline yes"><span class="icon">✓</span><p><b>Ranked threads</b> with a summary
-          each, and a Gmail deep link to open any of them.</p></div>
-        <div class="cline yes"><span class="icon">✓</span><p><b>Draft replies</b> on the ones that
-          need answering, one click to copy.</p></div>
-      </div>
-    </div>
-    <div class="device">
-      <div class="chrome"><span class="cap">popup</span></div>
-      <img src="data:image/png;base64,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" alt="The Catch Up popup: a time-window picker, a Catch me up button, and the remaining free allowance." />
-    </div>
-  </div>
-</section>
-
 <section id="privacy">
-  <div class="shell split">
-    <div>
+  <div class="shell">
+    <div class="prose">
       <h2 class="head serif">What it reads, and what it doesn't</h2>
       <p class="head-note">A tool that reads your mail should be exact about what that means, so
         here it is without the hedging.</p>
@@ -514,19 +494,6 @@
         <div class="cline no"><span class="icon">✕</span><p>No ads, no trackers, no selling data,
           and <b>your mail is never used to train models</b>.</p></div>
       </div>
-      <p style="margin:1.75rem 0 0;">
-        <a class="btn btn-quiet" href="./privacy-policy.html">Read the full privacy policy</a>
-      </p>
-    </div>
-    <div>
-      <div class="device" style="max-width:24rem;">
-        <div class="chrome"><span class="cap">subscribed</span></div>
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAACwCAMAAAB3ouo+AAAC4lBMVEX////5//////bavbgRGCeco6/7//8lY+vz9Pbl5+v///3p+f////orY+v//fLi9v/45c3//Pass8zUu7ny/P/++O7G5vrW7/wlY+zu1cP/9uey0/D87NX/++nz///I8v7qzL7+8+P46dLs/v/t7/FvNCf/8MKpvN/3+Pk1aOzC8P8re/Oty+3A4vbc9/+srcWyssn1///DsbvJuLudprektdC91uvb8/+12fVKVGTk8PiswuHy4fb7796qyOqorbqgo7ARGDK+sbT/995ewPwrdvKmr8L+/P0lZ+7y8e9LaOym5f26scQyY+uoudYRHTzZ5verxOawq7E0jvcRPX/i9fyHx/K+3vXixLq3rrn36tyxzuwdGCebqMMSN3Vut/Cc1/j/9tfEs7RxxvYlbPDx3MR4fOu77//KlXrBtL3O6/uzrsJieKbn0POK2fxud+u6ne3t8vpim9jBoe56tOC8z/lWhu87IiflybxAaOunqLFeduyzgW/o6uyIdHi+xMaymu5dWGWvtb3b8Pz126/ZxsKku93i+/8RHlAlcfH07uOScHRrntnku47/9Pr/6cCxvcjU9f/WtfA5ce3y0aFegbr48PrSubXv+PxijfDPx/SPSiec4P1GmPfgzcOdUi0uYqrR5PTcvPFwPSfIpu5Ubey5ur7WpID847enpLBaKieefHbu5t2uxfhrlfF7aGu96P2brs6etdjs3M3U1eHhxfJgs+lnbpVsaYJ80/2w5/9NoviXp/Lvx45XpfhjlMuJju6PzfGkjoJEeu/itXdIWnTx1PNTbZv2/vPBeULDuvR9pvX/7cqbiuwWUqLp4flQdq7CppU3er/h6+V3gZSww9PJlV1eY3C0q/J5ma7iyKg0Q01Zs/vl3Ntpk8NtZm1ePS/Sw8JMWn5AivMRKWC9qe/dvZ4nT3yrZTalpoxwXWNHktTHvJV1YE89NDSfvflmTT6ldUhaVFJ1msePZ0iltpki761HAAAACXBIWXMAAAsSAAALEgHS3X78AAAOr0lEQVR4nO2deVwT1xaAb5JJRpMYEiAQQgiEUEUBAYFIWAxGWdwQsGwCalEQcekDaUVFQMANKmKrQn1CtX11K63U6tOq1bbW11bbaqu1+/66t69v/f/97p1JCJuJ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" alt="The popup showing an unlimited subscription, with a manage and cancel link." />
-      </div>
-      <p style="font-size:.83rem;color:var(--faint);margin:1rem 0 0;max-width:24rem;">
-        Subscribed users get a <b style="color:var(--muted);font-weight:600;">manage / cancel</b>
-        link right in the popup. No email, no support ticket, no retention call.
-      </p>
     </div>
   </div>
 </section>
@@ -554,14 +521,10 @@
         <p class="pdesc">As many as you want. Cancel in one click from inside the extension.</p>
       </div>
     </div>
-
-    <div class="notes">
-      <span class="note">Shown and charged in your local currency</span>
-      <span class="note">Cancel anytime, keeps working till the period ends</span>
-      <span class="note">Card handled by Stripe, never by us</span>
-    </div>
   </div>
 </section>
+
+
 
 <footer class="site">
   <div class="shell">
