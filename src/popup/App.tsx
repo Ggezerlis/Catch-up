@@ -215,14 +215,14 @@ function Paywall({ onPurchased }: { onPurchased: () => void }) {
           disabled={busy !== null}
           className="flex-1 rounded-md border border-amber-300 bg-white py-1.5 text-xs font-medium text-amber-900 hover:bg-amber-100 disabled:opacity-60"
         >
-          {busy === "single" ? "Opening…" : "1 catch-up · $0.50"}
+          {busy === "single" ? "Opening…" : "1 catch-up · €0.50"}
         </button>
         <button
           onClick={() => buy("subscription")}
           disabled={busy !== null}
           className="flex-1 rounded-md bg-amber-600 py-1.5 text-xs font-medium text-white hover:bg-amber-700 disabled:opacity-60"
         >
-          {busy === "subscription" ? "Opening…" : "Unlimited · $3.99/mo"}
+          {busy === "subscription" ? "Opening…" : "Unlimited · €3.99/mo"}
         </button>
       </div>
       {err && <p className="mt-2 text-xs text-red-700">{err}</p>}
